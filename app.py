@@ -91,11 +91,11 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
 
     return trades, df, total_profit, win_rate, signals
 
-st.title("📈 Backtest BTCUSDT - SMA Crossover - Timeframe H1 data 2022-2025")
+st.title("Backtest BTCUSDT - SMA Crossover - Timeframe H1 data 2022-2025")
 
 st.markdown(
     """
-    ### 📖 Penjelasan Strategi SMA Crossover
+    ### Penjelasan Strategi SMA Crossover
     - **SMA Fast**: rata-rata harga jangka pendek, lebih sensitif terhadap perubahan harga.
     - **SMA Slow**: rata-rata harga jangka panjang, lebih halus dan menunjukkan tren utama.
     - **Golden Cross**: SMA Fast menembus ke atas SMA Slow → sinyal bullish (BUY).
@@ -122,7 +122,7 @@ if run_button:
     st.write("Total Profit:", round(total_profit, 2))
     st.write("Win Rate:", round(win_rate * 100, 2), "%")
 
-    st.write("### 📋 Log Sinyal Trading")
+    st.write("### Log Sinyal Trading")
     signals_df = pd.DataFrame(signals)
     st.dataframe(signals_df)
 
@@ -182,7 +182,7 @@ if run_button:
     st.markdown(
         f"""
         ---
-        ### 📊 Kesimpulan Analisa
+        ### Kesimpulan Analisa
         - Total Profit: **{round(total_profit,2)}**
         - Win Rate: **{round(win_rate*100,2)}%**
         - Sharpe Ratio: **{sharpe_ratio:.2f}**
