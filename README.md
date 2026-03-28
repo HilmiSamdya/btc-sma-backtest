@@ -37,8 +37,10 @@ Strategi ini efektif untuk menangkap tren besar, tetapi bisa menghasilkan sinyal
    git clone https://github.com/HilmiSamdya/btc-sma-backtest.git
    cd btc-sma-backtest
 2. Install dependencies:
+   ```bash
    pip install -r requirements.txt
-3. Jalankan Aplikasi:
+4. Jalankan Aplikasi:
+   ```bash
    streamlit run app.py
 
 ## Contoh Hasil Backtest
