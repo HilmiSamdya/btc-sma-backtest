@@ -55,7 +55,7 @@ Strategi ini efektif untuk menangkap tren besar, tetapi bisa menghasilkan sinyal
 - Kelemahan: di kondisi sideways muncul banyak sinyal palsu.
 - Dengan RR sekitar **1.67**, strategi ini cukup sehat karena TP lebih besar dari SL.
 
-## 📈 Visualisasi Hasil Backtest
+## Visualisasi Hasil Backtest
 
 ### Equity Curve
 ![Equity Curve](Visualisasi/equity_curve.png)
