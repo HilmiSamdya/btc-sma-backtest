@@ -1,3 +1,5 @@
+![Python](https://img.shields.io/badge/python-3.10-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
 # Backtest BTCUSDT - SMA Crossover
 
 Proyek ini adalah aplikasi **Streamlit** untuk melakukan backtest strategi **Simple Moving Average (SMA) crossover** pada pasangan BTCUSDT dengan data timeframe H1 (2022–2025).  
