@@ -58,16 +58,16 @@ Strategi ini efektif untuk menangkap tren besar, tetapi bisa menghasilkan sinyal
 ## 📈 Visualisasi Hasil Backtest
 
 ### Equity Curve
-![Equity Curve](Visualisasi/equity_curve.png)
+![Equity Curve](equity_curve.png)
 
 ### Histogram Profit
-![Histogram Profit](Visualisasi/histogram.png)
+![Histogram Profit](histogram.png)
 
 ### Win/Loss Streak
-![Win/Loss Streak](Visualisasi/streak.png)
+![Win/Loss Streak](streak.png)
 
 ### Drawdown Curve
-![Drawdown Curve](Visualisasi/drawdown.png)
+![Drawdown Curve](drawdown.png)
 
 
 
