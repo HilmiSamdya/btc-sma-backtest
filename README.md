@@ -4,6 +4,7 @@
 
 Proyek ini adalah aplikasi **Streamlit** untuk melakukan backtest strategi **Simple Moving Average (SMA) crossover** pada pasangan BTCUSDT dengan data timeframe H1 (2022–2025).  
 Aplikasi ini menampilkan **log sinyal trading**, **visualisasi performa dalam tab interaktif**, serta **analisa otomatis** (profit, win rate, Sharpe ratio).
+**Live Demo:** [Coba di sini](https://btc-sma-backtest-qimupig9ibiv6itfxh9xth.streamlit.app/)
 
 ---
 
@@ -49,13 +50,6 @@ Aplikasi ini menampilkan **log sinyal trading**, **visualisasi performa dalam ta
 Strategi ini efektif untuk menangkap tren besar, tetapi bisa menghasilkan sinyal palsu saat pasar sideways.
 
 ---
-
-# Backtest BTCUSDT – SMA Crossover (Streamlit App)
-
-Aplikasi Streamlit untuk backtest strategi SMA crossover pada pasangan BTCUSDT.  
-Menampilkan log sinyal trading, visualisasi interaktif, dan analisa otomatis.
-
-**Live Demo:** [Coba di sini](https://btc-sma-backtest-qimupig9ibiv6itfxh9xth.streamlit.app/)
 
 ## Contoh Hasil Backtest
 
