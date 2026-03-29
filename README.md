@@ -50,17 +50,12 @@ Strategi ini efektif untuk menangkap tren besar, tetapi bisa menghasilkan sinyal
 
 ---
 
-## Cara Menjalankan
-1. Clone repository:
-   ```bash
-   git clone https://github.com/HilmiSamdya/btc-sma-backtest.git
-   cd btc-sma-backtest
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-4. Jalankan Aplikasi:
-   ```bash
-   streamlit run app.py
+# Backtest BTCUSDT – SMA Crossover (Streamlit App)
+
+Aplikasi Streamlit untuk backtest strategi SMA crossover pada pasangan BTCUSDT.  
+Menampilkan log sinyal trading, visualisasi interaktif, dan analisa otomatis.
+
+**Live Demo:** [Coba di sini](https://btc-sma-backtest-qimupig9ibiv6itfxh9xth.streamlit.app/)
 
 ## Contoh Hasil Backtest
 
