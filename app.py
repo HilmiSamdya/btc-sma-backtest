@@ -187,7 +187,7 @@ if run_button:
         - Win Rate: **{round(win_rate*100,2)}%**
         - Sharpe Ratio: **{sharpe_ratio:.2f}**
 
-        📌 Interpretasi:
+        Interpretasi:
         - Strategi SMA crossover cocok untuk tren panjang (bull run BTC).
         - Kelemahan: di kondisi sideways muncul banyak sinyal palsu.
         - Dengan RR sekitar {round(TICKS_TP/TICKS_SL,2)}, strategi ini cukup sehat karena TP lebih besar dari SL.
