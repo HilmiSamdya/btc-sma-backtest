@@ -22,7 +22,24 @@ Aplikasi ini menampilkan **log sinyal trading**, **visualisasi performa dalam ta
   - Interpretasi strategi
 
 ---
+## Visualisasi TradingView + Log Streamlit
 
+### TradingView Chart (Pine Script)
+![TradingView SMA Crossover](Visualisasi/tv.png)
+
+**Keterangan:**
+- Garis **SMA Fast** ditampilkan dengan warna **biru**.
+- Garis **SMA Slow** ditampilkan dengan warna **merah**.
+- Golden Cross terjadi saat garis biru menembus ke atas garis merah → sinyal BUY.
+- Death Cross terjadi saat garis biru menembus ke bawah garis merah → sinyal SELL.
+
+### Log Trading dari Streamlit
+![Streamlit Trading Log](Visualisasi/log.png)
+
+**Keterangan:**
+- Log Streamlit mencatat eksekusi sinyal (BUY/SELL, TP/SL, Exit).
+- Kombinasi chart TradingView dan log Streamlit memudahkan verifikasi bahwa hasil backtest Python konsisten dengan chart TradingView.
+  
 ## Penjelasan Strategi
 - **SMA Fast**: rata-rata harga jangka pendek, lebih sensitif terhadap perubahan harga.
 - **SMA Slow**: rata-rata harga jangka panjang, lebih halus dan menunjukkan tren utama.
