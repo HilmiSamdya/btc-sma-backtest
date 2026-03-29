@@ -1,0 +1,63 @@
+//@version=5
+strategy("MA Crossover Strategy with TP/SL", overlay=true)
+
+// --- Input untuk Moving Average ---
+fast_ma_length = input.int(50, "Fast MA Length", minval=1)
+slow_ma_length = input.int(100, "Slow MA Length", minval=1)
+ma_source = input.source(close, "MA Source")
+ma_type = input.string("SMA", "MA Type", options=["SMA", "EMA", "WMA", "RMA"])
+
+// --- Input untuk TP/SL dan Lot ---
+take_profit_pips = input.int(750, "Take Profit (Pips)", minval=1)
+stop_loss_pips = input.int(250, "Stop Loss (Pips)", minval=1)
+lot_size = input.float(10000, "Lot Size", minval=10000, step=10000)
+
+// --- Trading Hours Input ---
+trading_hours = input.string("0900-1700", "Trading Session (HHmm-HHmm)", inline = "session")
+enable_trading_hours = input.bool(true, "Enable Trading Hours", inline = "session")
+timezone_offset = input.string("Etc/UTC", "Timezone", options = ["Etc/UTC", "Etc/GMT-14", "Etc/GMT-13", "Etc/GMT-12", "Etc/GMT-11", "Etc/GMT-10", "Etc/GMT-9", "Etc/GMT-8", "Etc/GMT-7", "Etc/GMT-6", "Etc/GMT-5", "Etc/GMT-4", "Etc/GMT-3", "Etc/GMT-2", "Etc/GMT-1", "Etc/GMT", "Etc/GMT+1", "Etc/GMT+2", "Etc/GMT+3", "Etc/GMT+4", "Etc/GMT+5", "Etc/GMT+6", "Etc/GMT+7", "Etc/GMT+8", "Etc/GMT+9", "Etc/GMT+10", "Etc/GMT+11", "Etc/GMT+12"])
+
+// --- Fungsi untuk Memilih Tipe MA ---
+f_ma(type, src, len) =>
+    float result = na
+    if type == "SMA"
+        result := ta.sma(src, len)
+    else if type == "EMA"
+        result := ta.ema(src, len)
+    else if type == "WMA"
+        result := ta.wma(src, len)
+    else if type == "RMA"
+        result := ta.rma(src, len)
+    result
+
+// --- Perhitungan Moving Average ---
+fast_ma = f_ma(ma_type, ma_source, fast_ma_length)
+slow_ma = f_ma(ma_type, ma_source, slow_ma_length)
+
+// --- Logika Trading Hours ---
+// `time()` with a `timezone` parameter allows the session to be evaluated in the specified time zone.
+in_session = enable_trading_hours ? time(timeframe.period, trading_hours, timezone_offset) : true
+
+// --- Logika Sinyal dan Eksekusi Order ---
+buy_signal = ta.crossover(fast_ma, slow_ma)
+sell_signal = ta.crossunder(fast_ma, slow_ma)
+
+// Entry Long
+if (buy_signal and in_session)
+    strategy.entry("Long", strategy.long, qty=lot_size)
+    strategy.exit("Exit Long", "Long", profit=take_profit_pips, loss=stop_loss_pips)
+
+// Entry Short
+if (sell_signal and in_session)
+    strategy.entry("Short", strategy.short, qty=lot_size)
+    strategy.exit("Exit Short", "Short", profit=take_profit_pips, loss=stop_loss_pips)
+
+// --- Visualisasi pada Chart ---
+plot(fast_ma, "Fast MA", color=color.new(color.blue, 0), linewidth=1)
+plot(slow_ma, "Slow MA", color=color.new(color.red, 0), linewidth=1)
+
+// Plot panah dan teks untuk sinyal BUY
+plotshape(series=buy_signal and in_session, title="Buy Signal", location=location.belowbar, color=color.new(color.green, 0), style=shape.triangleup, size=size.small, text="BUY", textcolor=color.new(color.white, 0))
+
+// Plot panah dan teks untuk sinyal SELL
+plotshape(series=sell_signal and in_session, title="Sell Signal", location=location.abovebar, color=color.new(color.red, 0), style=shape.triangledown, size=size.small, text="SELL", textcolor=color.new(color.white, 0))
