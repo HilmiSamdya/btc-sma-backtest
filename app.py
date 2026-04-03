@@ -4,18 +4,14 @@ import numpy as np
 import glob
 import os
 import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')
 
 # ============ PAGE CONFIG ============
 st.set_page_config(
     page_title="BTC Backtest Terminal",
     page_icon="📈",
     layout="wide",
-    initial_sidebar_state="expanded"
 )
 
-# Set dark theme
 plt.style.use('dark_background')
 
 # ============ BACKTEST LOGIC ============
@@ -23,10 +19,10 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
     """Run SMA crossover backtest on BTC data"""
     
     files = sorted(
-        glob.glob("data/btcusdt2024h1/BTCUSDT-1h-2024-*.csv")
-        + glob.glob("data/btcusdt2025h1/BTCUSDT-1h-2025-*.csv")
-        + glob.glob("data/btcusdt2023h1/BTCUSDT-1h-2023-*.csv")
-        + glob.glob("data/btcusdt2022h1/BTCUSDT-1h-2022-*.csv")
+        glob.glob("btcusdt2024h1/BTCUSDT-1h-2024-*.csv")
+        + glob.glob("btcusdt2025h1/BTCUSDT-1h-2025-*.csv")
+        + glob.glob("btcusdt2023h1/BTCUSDT-1h-2023-*.csv")
+        + glob.glob("btcusdt2022h1/BTCUSDT-1h-2022-*.csv")
     )
     
     if not files:
@@ -44,7 +40,6 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
             ).dt.tz_convert("Asia/Jakarta")
             dfs.append(df_temp)
         except Exception as e:
-            st.warning(f"Error reading {f}: {str(e)}")
             continue
     
     if not dfs:
@@ -71,20 +66,10 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
         
         if position is None:
             if golden:
-                signals.append({
-                    "time": ts, 
-                    "price": round(curr["close"], 2), 
-                    "signal": "Golden Cross", 
-                    "type": "golden"
-                })
+                signals.append({"time": ts, "price": round(curr["close"], 2), "signal": "Golden Cross", "type": "golden"})
                 position = {"side": "BUY", "entry": curr["close"]}
             elif death:
-                signals.append({
-                    "time": ts, 
-                    "price": round(curr["close"], 2), 
-                    "signal": "Death Cross", 
-                    "type": "death"
-                })
+                signals.append({"time": ts, "price": round(curr["close"], 2), "signal": "Death Cross", "type": "death"})
                 position = {"side": "SELL", "entry": curr["close"]}
         else:
             entry = position["entry"]
@@ -93,60 +78,30 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
                 sl_level = entry - TICKS_SL * TICK_SIZE
                 if curr["high"] >= tp_level:
                     trades.append(tp_level - entry)
-                    signals.append({
-                        "time": ts, 
-                        "price": round(tp_level, 2), 
-                        "signal": "TP BUY ✓", 
-                        "type": "tp"
-                    })
+                    signals.append({"time": ts, "price": round(tp_level, 2), "signal": "TP BUY ✓", "type": "tp"})
                     position = None
                 elif curr["low"] <= sl_level:
                     trades.append(sl_level - entry)
-                    signals.append({
-                        "time": ts, 
-                        "price": round(sl_level, 2), 
-                        "signal": "SL BUY ✗", 
-                        "type": "sl"
-                    })
+                    signals.append({"time": ts, "price": round(sl_level, 2), "signal": "SL BUY ✗", "type": "sl"})
                     position = None
                 elif death:
                     trades.append(curr["close"] - entry)
-                    signals.append({
-                        "time": ts, 
-                        "price": round(curr["close"], 2), 
-                        "signal": "Exit BUY (Death)", 
-                        "type": "exit"
-                    })
+                    signals.append({"time": ts, "price": round(curr["close"], 2), "signal": "Exit BUY (Death)", "type": "exit"})
                     position = {"side": "SELL", "entry": curr["close"]}
             else:
                 tp_level = entry - TICKS_TP * TICK_SIZE
                 sl_level = entry + TICKS_SL * TICK_SIZE
                 if curr["low"] <= tp_level:
                     trades.append(entry - tp_level)
-                    signals.append({
-                        "time": ts, 
-                        "price": round(tp_level, 2), 
-                        "signal": "TP SELL ✓", 
-                        "type": "tp"
-                    })
+                    signals.append({"time": ts, "price": round(tp_level, 2), "signal": "TP SELL ✓", "type": "tp"})
                     position = None
                 elif curr["high"] >= sl_level:
                     trades.append(entry - sl_level)
-                    signals.append({
-                        "time": ts, 
-                        "price": round(sl_level, 2), 
-                        "signal": "SL SELL ✗", 
-                        "type": "sl"
-                    })
+                    signals.append({"time": ts, "price": round(sl_level, 2), "signal": "SL SELL ✗", "type": "sl"})
                     position = None
                 elif golden:
                     trades.append(entry - curr["close"])
-                    signals.append({
-                        "time": ts, 
-                        "price": round(curr["close"], 2), 
-                        "signal": "Exit SELL (Golden)", 
-                        "type": "exit"
-                    })
+                    signals.append({"time": ts, "price": round(curr["close"], 2), "signal": "Exit SELL (Golden)", "type": "exit"})
                     position = {"side": "BUY", "entry": curr["close"]}
     
     if not trades:
@@ -196,17 +151,17 @@ def plot_equity(equity):
     ax.plot(equity, label='Equity', color='#00e5a0', linewidth=2)
     ax.plot(peak, label='Peak', color='#f5a623', linewidth=1, linestyle='--', alpha=0.7)
     ax.fill_between(range(len(equity)), equity, alpha=0.1, color='#00e5a0')
-    ax.set_title('Equity Curve', fontsize=14, fontweight='bold', color='#00e5a0')
+    ax.set_title('Equity Curve', fontsize=14, fontweight='bold')
     ax.set_xlabel('Trade #')
     ax.set_ylabel('Cumulative P&L')
-    ax.legend(loc='best', facecolor='#0a1520', edgecolor='#0f2535')
+    ax.legend(loc='best')
     ax.grid(True, alpha=0.2)
     return fig
 
 def plot_histogram(trades):
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.hist(trades, bins=25, color='#00e5a0', edgecolor='#0f2535', alpha=0.7)
-    ax.set_title('Trade Distribution', fontsize=14, fontweight='bold', color='#00e5a0')
+    ax.set_title('Trade Distribution', fontsize=14, fontweight='bold')
     ax.set_xlabel('P&L')
     ax.set_ylabel('Frequency')
     ax.grid(True, alpha=0.2, axis='y')
@@ -216,8 +171,7 @@ def plot_streak(streaks, max_win, max_loss):
     fig, ax = plt.subplots(figsize=(12, 4))
     colors = ['#00e5a0' if s > 0 else '#ff4757' for s in streaks]
     ax.bar(range(len(streaks)), streaks, color=colors, edgecolor='#0f2535', alpha=0.8)
-    ax.set_title(f'Win/Loss Streak (Max Win: {max_win} / Max Loss: {max_loss})', 
-                 fontsize=14, fontweight='bold', color='#00e5a0')
+    ax.set_title(f'Win/Loss Streak (Max Win: {max_win} / Max Loss: {max_loss})', fontsize=14, fontweight='bold')
     ax.set_xlabel('Trade #')
     ax.set_ylabel('Streak')
     ax.grid(True, alpha=0.2, axis='y')
@@ -228,97 +182,78 @@ def plot_drawdown(drawdown):
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(drawdown, label='Drawdown', color='#ff4757', linewidth=2)
     ax.fill_between(range(len(drawdown)), drawdown, alpha=0.1, color='#ff4757')
-    ax.set_title('Drawdown Curve', fontsize=14, fontweight='bold', color='#ff4757')
+    ax.set_title('Drawdown Curve', fontsize=14, fontweight='bold')
     ax.set_xlabel('Trade #')
     ax.set_ylabel('Drawdown')
     ax.grid(True, alpha=0.2)
     return fig
 
-# ============ STREAMLIT APP ============
-def main():
-    # Create directories
-    os.makedirs("data", exist_ok=True)
-    os.makedirs("templates", exist_ok=True)
-    
-    # Header
-    col1, col2 = st.columns([0.7, 0.3])
-    with col1:
-        st.markdown("## 📈 BTC BACKTEST TERMINAL")
-        st.caption("BTC/USDT · H1 · 2022–2025 | SMA Crossover Strategy")
-    
-    with col2:
-        st.metric("Status", "🟢 Ready")
-    
-    # ============ SIDEBAR ============
-    with st.sidebar:
-        st.header("⚙️ Parameter Strategi")
-        
-        sma_fast = st.slider("SMA Fast", min_value=5, max_value=100, value=50, step=1)
-        sma_slow = st.slider("SMA Slow", min_value=20, max_value=200, value=100, step=1)
-        ticks_tp = st.number_input("Take Profit (ticks)", min_value=1000.0, max_value=200000.0, value=50000.0, step=1000.0)
-        ticks_sl = st.number_input("Stop Loss (ticks)", min_value=1000.0, max_value=200000.0, value=30000.0, step=1000.0)
-        tick_size = st.number_input("Tick Size", min_value=0.01, max_value=1.0, value=0.1, step=0.01)
-        
-        if ticks_sl > 0:
-            rr_ratio = ticks_tp / ticks_sl
-            st.metric("R/R Ratio", f"{rr_ratio:.2f}")
-        
-        run_button = st.button("▶ RUN BACKTEST", use_container_width=True, type="primary")
-        
-        st.divider()
-        st.markdown("""
-        ### 📋 Info Server
-        - **Framework:** Streamlit
-        - **Lokasi Data:** Folder `data/`
-        - **Format:** `BTCUSDT-1h-YYYY-MM.csv`
-        - **●** Golden Cross → BUY
-        - **●** Death Cross → SELL
-        """)
-    
-    # ============ MAIN ============
-    if run_button:
-        with st.spinner("⏳ Menjalankan backtest..."):
-            result, error = run_backtest(sma_fast, sma_slow, ticks_tp, ticks_sl, tick_size)
-        
-        if error:
-            st.error(f"❌ {error}")
-        else:
-            st.success(f"✅ Backtest berhasil - {result['total_trades']} trades")
-            
-            # Metrics
-            col1, col2, col3, col4 = st.columns(4)
-            with col1:
-                st.metric("Total Trades", result["total_trades"])
-            with col2:
-                profit_color = "🟢" if result["total_profit"] >= 0 else "🔴"
-                st.metric("Total Profit", f"{profit_color} {result['total_profit']:.2f}")
-            with col3:
-                wr_color = "🟢" if result["win_rate"] >= 50 else "🔴"
-                st.metric("Win Rate", f"{wr_color} {result['win_rate']:.1f}%")
-            with col4:
-                sharpe_color = "🟢" if result["sharpe"] >= 0 else "🔴"
-                st.metric("Sharpe Ratio", f"{sharpe_color} {result['sharpe']:.2f}")
-            
-            st.divider()
-            
-            # Tabs
-            tab1, tab2, tab3, tab4, tab5 = st.tabs(["📈 Equity", "📊 Distribusi", "🔥 Streak", "📉 Drawdown", "📋 Signals"])
-            
-            with tab1:
-                st.pyplot(plot_equity(result["equity"]))
-            
-            with tab2:
-                st.pyplot(plot_histogram(result["trades"]))
-            
-            with tab3:
-                st.pyplot(plot_streak(result["streaks"], result["max_win_streak"], result["max_loss_streak"]))
-            
-            with tab4:
-                st.pyplot(plot_drawdown(result["drawdown"]))
-            
-            with tab5:
-                signals_df = pd.DataFrame(result["signals"])
-                st.dataframe(signals_df, use_container_width=True, hide_index=True)
+# ============ MAIN APP ============
+# Header
+st.markdown("# 📈 BTC BACKTEST TERMINAL")
+st.markdown("**BTC/USDT · H1 · 2022–2025** | SMA Crossover Strategy")
 
-if __name__ == "__main__":
-    main()
+# Create data directory
+os.makedirs("data", exist_ok=True)
+
+# Sidebar
+st.sidebar.header("⚙️ Parameter Strategi")
+sma_fast = st.sidebar.slider("SMA Fast", min_value=5, max_value=100, value=50, step=1)
+sma_slow = st.sidebar.slider("SMA Slow", min_value=20, max_value=200, value=100, step=1)
+ticks_tp = st.sidebar.number_input("Take Profit (ticks)", min_value=1000.0, max_value=200000.0, value=50000.0, step=1000.0)
+ticks_sl = st.sidebar.number_input("Stop Loss (ticks)", min_value=1000.0, max_value=200000.0, value=30000.0, step=1000.0)
+tick_size = st.sidebar.number_input("Tick Size", min_value=0.01, max_value=1.0, value=0.1, step=0.01)
+
+if ticks_sl > 0:
+    rr_ratio = ticks_tp / ticks_sl
+    st.sidebar.metric("R/R Ratio", f"{rr_ratio:.2f}")
+
+run_button = st.sidebar.button("▶ RUN BACKTEST", use_container_width=True)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("""
+### 📋 Info
+- **Framework:** Streamlit
+- **Lokasi Data:** Folder `data/`
+- **Format:** `BTCUSDT-1h-YYYY-MM.csv`
+""")
+
+# Main content
+if run_button:
+    with st.spinner("⏳ Menjalankan backtest..."):
+        result, error = run_backtest(sma_fast, sma_slow, ticks_tp, ticks_sl, tick_size)
+    
+    if error:
+        st.error(f"❌ {error}")
+    else:
+        st.success(f"✅ Backtest berhasil - {result['total_trades']} trades")
+        
+        # Metrics
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Total Trades", result["total_trades"])
+        col2.metric("Total Profit", f"{result['total_profit']:.2f}")
+        col3.metric("Win Rate", f"{result['win_rate']:.1f}%")
+        col4.metric("Sharpe Ratio", f"{result['sharpe']:.2f}")
+        
+        st.markdown("---")
+        
+        # Tabs
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Equity", "Distribusi", "Streak", "Drawdown", "Signals"])
+        
+        with tab1:
+            st.pyplot(plot_equity(result["equity"]))
+        
+        with tab2:
+            st.pyplot(plot_histogram(result["trades"]))
+        
+        with tab3:
+            st.pyplot(plot_streak(result["streaks"], result["max_win_streak"], result["max_loss_streak"]))
+        
+        with tab4:
+            st.pyplot(plot_drawdown(result["drawdown"]))
+        
+        with tab5:
+            signals_df = pd.DataFrame(result["signals"])
+            st.dataframe(signals_df, use_container_width=True, hide_index=True)
+else:
+    st.info("👈 Set parameter di sidebar dan klik 'RUN BACKTEST' untuk memulai")
