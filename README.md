@@ -36,7 +36,7 @@ Aplikasi ini menampilkan **log sinyal trading**, **visualisasi performa dalam ta
 - Death Cross terjadi saat garis biru menembus ke bawah garis merah → sinyal SELL.
 
 ### Log Trading dari Streamlit
-![Streamlit Trading Log](Visualisasi/log.png)
+![Streamlit Trading Log](Visualisasi/sinyal.png)
 
 **Keterangan:**
 - Log Streamlit mencatat eksekusi sinyal (BUY/SELL, TP/SL, Exit).
