@@ -50,10 +50,10 @@ def run_backtest(SMA_FAST, SMA_SLOW, TICKS_TP, TICKS_SL, TICK_SIZE):
     
     # Find CSV files
     files = sorted(
-        glob.glob("data/btcusdt2024h1/BTCUSDT-1h-2024-*.csv")
-        + glob.glob("data/btcusdt2025h1/BTCUSDT-1h-2025-*.csv")
-        + glob.glob("data/btcusdt2023h1/BTCUSDT-1h-2023-*.csv")
-        + glob.glob("data/btcusdt2022h1/BTCUSDT-1h-2022-*.csv")
+        glob.glob("dbtcusdt2024h1/BTCUSDT-1h-2024-*.csv")
+        + glob.glob("btcusdt2025h1/BTCUSDT-1h-2025-*.csv")
+        + glob.glob("btcusdt2023h1/BTCUSDT-1h-2023-*.csv")
+        + glob.glob("btcusdt2022h1/BTCUSDT-1h-2022-*.csv")
     )
     
     if not files:
